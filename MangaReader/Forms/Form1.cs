@@ -17,6 +17,8 @@ namespace MangaReader.Forms
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            var watch = System.Diagnostics.Stopwatch.StartNew();
+
             // Create Manga Object
             //
             Manga manga = new Manga();
@@ -33,29 +35,16 @@ namespace MangaReader.Forms
             //
             manga.Chapters.Reverse();
 
-            Console.WriteLine("Chapters loaded, getting chapter pages.");
+            int ctl = 400;
+            int ptl = 1;
 
-            var watch = System.Diagnostics.Stopwatch.StartNew();
-
-            // get the total number of pages for each chapter
-            // 
-            int totalPages = 0;
-
-            foreach (var c in manga.Chapters)
-                c.PageCount = GetChapterPageCount(c);
-
-            watch.Stop();
-            var elapsedMs = watch.ElapsedMilliseconds;
-
-
-            // print all the chapters for the chosen manga
+            // get all page links for a given chapter
             //
-            foreach (MangaChapter c in manga.Chapters)
-                c.Print();
+            manga.Chapters[ctl].ChapterPages = GetAllChapterPages(manga.Chapters[ctl]);
 
-            Console.WriteLine("{0} has {1} chapters and {2} total pages.", manga.Title, manga.Chapters.Count, totalPages);
-
-            Console.WriteLine("Completed in {0} ms", elapsedMs);
+            // show a page in the form
+            //
+            pictureBox1.Image = GetPageImage(manga.Chapters[ctl].ChapterPages[ptl]);
         }
     }
 }
