@@ -18,7 +18,7 @@ namespace MangaReader.Classes
         {
             try
             {
-                // create temporary list to store found skins
+                // create temporary list to store found chapters
                 //
                 List<MangaChapter> Chapters = new List<MangaChapter>();
 
