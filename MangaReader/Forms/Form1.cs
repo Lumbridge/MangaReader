@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using MangaReader.Classes;
 
 using static MangaReader.Classes.ParseMethods;
+using System.Threading.Tasks;
 
 namespace MangaReader.Forms
 {
@@ -32,15 +33,20 @@ namespace MangaReader.Forms
             //
             manga.Chapters.Reverse();
 
+            Console.WriteLine("Chapters loaded, getting chapter pages.");
+
+            var watch = System.Diagnostics.Stopwatch.StartNew();
+
             // get the total number of pages for each chapter
             // 
             int totalPages = 0;
-            for (int i = 0; i < manga.Chapters.Count; i++)
-            {
-                manga.Chapters[i] = GetChapterPageCount(manga.Chapters[i]);
-                if (manga.Chapters[i].PageCount != "0")
-                    totalPages += int.Parse(manga.Chapters[i].PageCount);
-            }
+
+            foreach (var c in manga.Chapters)
+                c.PageCount = GetChapterPageCount(c);
+
+            watch.Stop();
+            var elapsedMs = watch.ElapsedMilliseconds;
+
 
             // print all the chapters for the chosen manga
             //
@@ -48,6 +54,8 @@ namespace MangaReader.Forms
                 c.Print();
 
             Console.WriteLine("{0} has {1} chapters and {2} total pages.", manga.Title, manga.Chapters.Count, totalPages);
+
+            Console.WriteLine("Completed in {0} ms", elapsedMs);
         }
     }
 }

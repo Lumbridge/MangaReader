@@ -74,7 +74,7 @@ namespace MangaReader.Classes
             }
         }
 
-        public static MangaChapter GetChapterPageCount(MangaChapter chapter)
+        public static string GetChapterPageCount(MangaChapter chapter)
         {
             // create the manga page url
             //
@@ -111,10 +111,10 @@ namespace MangaReader.Classes
             {
                 chapter.PageCount = "0";
 
-                return chapter;
+                //return chapter;
             }
 
-            return chapter;
+            return chapter.PageCount;
         }
     }
 
