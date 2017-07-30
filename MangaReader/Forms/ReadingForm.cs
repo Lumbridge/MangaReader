@@ -58,7 +58,7 @@ namespace MangaReader.Forms
             {
                 // decrement chapter to load index
                 //
-                ctl++;
+                ctl--;
 
                 // set page to load to the last page of the previous chapter
                 //
@@ -100,7 +100,7 @@ namespace MangaReader.Forms
             {
                 // increment the chapter index
                 //
-                ctl--;
+                ctl++;
 
                 // set the page index to 0 (first page of the next chapter)
                 ptl = 0;
@@ -146,7 +146,7 @@ namespace MangaReader.Forms
 
         private bool isLastPageOfChapter()
         {
-            if (manga.Chapters[ctl].ChapterPages[ptl].PageNumber == manga.Chapters[ctl].ChapterPages[manga.Chapters[ctl].PageCount].PageNumber)
+            if (manga.Chapters[ctl].ChapterPages[ptl].PageNumber == manga.Chapters[ctl].ChapterPages[manga.Chapters[ctl].PageCount - 1].PageNumber)
                 return true;
             else
                 return false;
