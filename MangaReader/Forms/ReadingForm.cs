@@ -1,42 +1,37 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 
 using MangaReader.Classes;
 
+using static MangaReader.Classes.Common;
+
 namespace MangaReader.Forms
 {
-    public partial class Form1 : Form
+    public partial class ReadingForm : Form
     {
-        public Form1()
+        private int ctl = 0, ptl = 0;
+        private Manga manga;
+        private MainForm _MainFormHandle;
+
+        public ReadingForm(MainForm mf)
         {
             InitializeComponent();
+
+            _MainFormHandle = mf;
+            ctl = mf.ctl;
+            ptl = mf.ptl;
+            manga = mf.manga;
         }
 
-        // Create Manga Object
-        //
-        Manga manga = new Manga();
-
-        int ctl = 1; // chapter to load
-        int ptl = 0; // page to load
-
-        private void Form1_Load(object sender, EventArgs e)
+        private void ReadingForm_Load(object sender, EventArgs e)
         {
-            // set the title of our manga
-            //
-            manga.Title = "Naruto";
-
-            // reverse the chapters so they're in order
-            //
-            manga.Chapters.Reverse();
-
-            // get all page links for a given chapter
-            //
-            manga.Chapters[ctl].ChapterPages = manga.Chapters[ctl].ChapterPages;
-
-            // show a page in the form
+            // load the page image into the picturebox
             //
             pictureBox1.Image = manga.Chapters[ctl].ChapterPages[ptl].PageImage;
 
+            // update the window text to reflect the current location in the manga
+            //
             UpdateWindowTitle();
         }
 

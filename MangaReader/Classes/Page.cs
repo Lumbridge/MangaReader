@@ -6,7 +6,7 @@ using static MangaReader.Classes.ImageDownloader;
 
 namespace MangaReader.Classes
 {
-    class Page
+    public class Page
     {
         // public
         public string PageNumber { get; set; }

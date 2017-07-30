@@ -9,10 +9,10 @@ using static MangaReader.Classes.Common;
 
 namespace MangaReader.Classes
 {
-    class MangaChapter
+    public class MangaChapter
     {
         // public
-        public string Title { get; set; }
+        public string ChapterTitle { get; set; }
         public string ChapterLink { get; set; }
         public string ChapterNumber { get; set; }
 
@@ -197,7 +197,7 @@ namespace MangaReader.Classes
         /// </summary>
         public MangaChapter()
         {
-            Title = string.Empty;
+            ChapterTitle = string.Empty;
             ChapterLink = string.Empty;
             ChapterNumber = string.Empty;
             PageCount = -1;
@@ -211,7 +211,7 @@ namespace MangaReader.Classes
         /// </summary>
         public void Print()
         {
-            Console.WriteLine("Title: {0}, Link: {1}, Chapter Number: {2}, Page Count: {3}", Title, ChapterLink, ChapterNumber, PageCount);
+            Console.WriteLine("Title: {0}, Link: {1}, Chapter Number: {2}, Page Count: {3}", ChapterTitle, ChapterLink, ChapterNumber, PageCount);
         }
     }
 }

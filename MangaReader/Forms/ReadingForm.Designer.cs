@@ -1,6 +1,6 @@
 ﻿namespace MangaReader.Forms
 {
-    partial class Form1
+    partial class ReadingForm
     {
         /// <summary>
         /// Required designer variable.
@@ -28,6 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Text = "ReadingForm";
+
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.button_Right = new System.Windows.Forms.Button();
             this.button_Left = new System.Windows.Forms.Button();
@@ -64,7 +68,7 @@
             this.button_Left.UseVisualStyleBackColor = true;
             this.button_Left.Click += new System.EventHandler(this.button_Left_Click);
             // 
-            // Form1
+            // ReadingForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -74,10 +78,9 @@
             this.Controls.Add(this.pictureBox1);
             this.Name = "Form1";
             this.Text = "Manga Reader";
-            this.Load += new System.EventHandler(this.Form1_Load);
+            this.Load += new System.EventHandler(this.ReadingForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
-
         }
 
         #endregion
@@ -87,4 +90,3 @@
         private System.Windows.Forms.Button button_Left;
     }
 }
-

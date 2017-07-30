@@ -10,7 +10,7 @@ using static MangaReader.Classes.Common;
 
 namespace MangaReader.Classes
 {
-    class Manga
+    public class Manga
     {
         // public
         public string Title { get; set; }
@@ -101,7 +101,7 @@ namespace MangaReader.Classes
                                 //
                                 temp.Add(new MangaChapter()
                                 {
-                                    Title = chapterTitle,
+                                    ChapterTitle = chapterTitle,
                                     ChapterLink = chapterLink,
                                     ChapterNumber = chapterNumber
                                 });
