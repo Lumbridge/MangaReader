@@ -56,7 +56,6 @@
     <Compile Include="Classes\Manga.cs" />
     <Compile Include="Classes\MangaChapter.cs" />
     <Compile Include="Classes\Page.cs" />
-    <Compile Include="Classes\ParseMethods.cs" />
     <Compile Include="Forms\Form1.cs">
       <SubType>Form</SubType>
     </Compile>

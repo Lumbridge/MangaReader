@@ -3,9 +3,6 @@ using System.Windows.Forms;
 
 using MangaReader.Classes;
 
-using static MangaReader.Classes.ParseMethods;
-using System.Threading.Tasks;
-
 namespace MangaReader.Forms
 {
     public partial class Form1 : Form
@@ -19,18 +16,14 @@ namespace MangaReader.Forms
         //
         Manga manga = new Manga();
 
-        int ctl = 0; // chapter to load
+        int ctl = 1; // chapter to load
         int ptl = 0; // page to load
 
         private void Form1_Load(object sender, EventArgs e)
         {
             // set the title of our manga
             //
-            manga.Title = "Hunter X Hunter";
-
-            // run our parser to get all the manga chapters for the manga we've selected
-            //
-            manga.Chapters = GetAllMangaChapters(manga.Title);
+            manga.Title = "Naruto";
 
             // reverse the chapters so they're in order
             //
@@ -38,37 +31,96 @@ namespace MangaReader.Forms
 
             // get all page links for a given chapter
             //
-            manga.Chapters[ctl].ChapterPages = GetAllChapterPages(manga.Chapters[ctl]);
+            manga.Chapters[ctl].ChapterPages = manga.Chapters[ctl].ChapterPages;
 
             // show a page in the form
             //
-            pictureBox1.Image = GetPageImage(manga.Chapters[ctl].ChapterPages[ptl]);
+            pictureBox1.Image = manga.Chapters[ctl].ChapterPages[ptl].PageImage;
 
             UpdateWindowTitle();
         }
 
         private void button_Right_Click(object sender, EventArgs e)
         {
-            if (ptl != 0)
+            if (ptl != 0) // previous page of same chapter
             {
+                // decrement the page to load index
+                //
                 ptl--;
-                pictureBox1.Image = GetPageImage(manga.Chapters[ctl].ChapterPages[ptl]);
+
+                // load the page image into the picturebox
+                //
+                pictureBox1.Image = manga.Chapters[ctl].ChapterPages[ptl].PageImage;
+
+                // update the window text to reflect the current location in the manga
+                //
                 UpdateWindowTitle();
             }
-            else
-                MessageBox.Show("This is the first page!");
+            else if (ctl == 0 && ptl == 0) // first page of first chapter
+            {
+                // show message box with basic info
+                //
+                MessageBox.Show("This is the first chapter!");
+            }
+            else // last page of previous chapter
+            {
+                // decrement chapter to load index
+                //
+                ctl--;
+
+                // set page to load to the last page of the previous chapter
+                //
+                ptl = manga.Chapters[ctl].PageCount - 1;
+
+                // load the page image into the picturebox
+                //
+                pictureBox1.Image = manga.Chapters[ctl].ChapterPages[ptl].PageImage;
+
+                // update the window text to reflect the current location in the manga
+                //
+                UpdateWindowTitle();
+            }
         }
 
         private void button_Left_Click(object sender, EventArgs e)
         {
-            if (ptl < int.Parse(manga.Chapters[ctl].PageCount) - 1)
+            if (ptl < manga.Chapters[ctl].PageCount - 1) // next page of same chapter
             {
+                // increment the page to load index
+                //
                 ptl++;
-                pictureBox1.Image = GetPageImage(manga.Chapters[ctl].ChapterPages[ptl]);
+
+                // load the next page image into the picturebox
+                //
+                pictureBox1.Image = manga.Chapters[ctl].ChapterPages[ptl].PageImage;
+
+                // update the window text to reflect the current location in the manga
+                //
                 UpdateWindowTitle();
             }
-            else
-                MessageBox.Show("End of chapter.");
+            else if (ctl == manga.TotalChapters && ptl == manga.Chapters[ctl].PageCount)
+            {
+                // show message box with basic info
+                //
+                MessageBox.Show("There are no more pages!");
+            }
+            else // first page of next chapter
+            {
+                // increment the chapter index
+                //
+                ctl++;
+
+                // set the page index to 0 (first page of the next chapter)
+                ptl = 0;
+
+                // load the page image into the picturebox
+                //
+                pictureBox1.Image = manga.Chapters[ctl].ChapterPages[ptl].PageImage;
+
+                // update the window text to reflect the current location in the manga
+                //
+                UpdateWindowTitle();
+            }
         }
 
         private void UpdateWindowTitle()
