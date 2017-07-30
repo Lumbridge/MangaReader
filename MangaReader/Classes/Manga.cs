@@ -97,16 +97,23 @@ namespace MangaReader.Classes
                                 //
                                 string chapterNumber = chapterTitle.Substring(chapterTitle.LastIndexOf(MangaTitle) + MangaTitle.Length + 1).Trim();
 
+                                if (chapterNumber.Contains(" "))
+                                    chapterNumber = chapterNumber.Remove(chapterNumber.IndexOf(' ') + 1).Trim();
+
                                 // add our parsed information to a chapter object
                                 //
                                 temp.Add(new MangaChapter()
                                 {
                                     ChapterTitle = chapterTitle,
                                     ChapterLink = chapterLink,
-                                    ChapterNumber = chapterNumber
+                                    ChapterNumber = int.Parse(chapterNumber)
                                 });
                             }
                         }
+
+                        // reverse the list so it appears in order in the combo box
+                        //
+                        temp.Reverse();
 
                         // add our temporary chapter list to the main object collection
                         //

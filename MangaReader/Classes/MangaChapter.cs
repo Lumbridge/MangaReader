@@ -14,7 +14,7 @@ namespace MangaReader.Classes
         // public
         public string ChapterTitle { get; set; }
         public string ChapterLink { get; set; }
-        public string ChapterNumber { get; set; }
+        public int ChapterNumber { get; set; }
 
         //private
         private List<Page> _ChapterPages { get; set; }
@@ -43,7 +43,7 @@ namespace MangaReader.Classes
                     {
                         // create these as local variables so we can use them as a start point for the image link creation
                         //
-                        string pageNumber = i.ToString();
+                        int pageNumber = i;
                         string pageLink = ChapterLink + "/page-" + i;
 
                         // scrape the page to find the image link
@@ -79,7 +79,7 @@ namespace MangaReader.Classes
                             // search through all of the nodes for one with the data we need
                             Parallel.ForEach(nodes, (n, state) => 
                             {
-                                if (n.InnerHtml.Contains(pageNumber))
+                                if (n.InnerHtml.Contains(pageNumber.ToString()))
                                 {
                                     // strip away the data around the link
                                     //
@@ -199,7 +199,7 @@ namespace MangaReader.Classes
         {
             ChapterTitle = string.Empty;
             ChapterLink = string.Empty;
-            ChapterNumber = string.Empty;
+            ChapterNumber = -1;
             PageCount = -1;
 
             _PageCount = -1;

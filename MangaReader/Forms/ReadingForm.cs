@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Windows.Forms;
 
 using MangaReader.Classes;
-
-using static MangaReader.Classes.Common;
 
 namespace MangaReader.Forms
 {
@@ -37,7 +34,7 @@ namespace MangaReader.Forms
 
         private void button_Right_Click(object sender, EventArgs e)
         {
-            if (ptl != 0) // previous page of same chapter
+            if (!isFirstPageOfChapter()) // previous page of same chapter
             {
                 // decrement the page to load index
                 //
@@ -51,7 +48,7 @@ namespace MangaReader.Forms
                 //
                 UpdateWindowTitle();
             }
-            else if (ctl == 0 && ptl == 0) // first page of first chapter
+            else if (isFirstChapter() && isFirstPageOfChapter()) // first page of first chapter
             {
                 // show message box with basic info
                 //
@@ -61,7 +58,7 @@ namespace MangaReader.Forms
             {
                 // decrement chapter to load index
                 //
-                ctl--;
+                ctl++;
 
                 // set page to load to the last page of the previous chapter
                 //
@@ -79,7 +76,7 @@ namespace MangaReader.Forms
 
         private void button_Left_Click(object sender, EventArgs e)
         {
-            if (ptl < manga.Chapters[ctl].PageCount - 1) // next page of same chapter
+            if (!isLastPageOfChapter()) // next page of same chapter
             {
                 // increment the page to load index
                 //
@@ -93,7 +90,7 @@ namespace MangaReader.Forms
                 //
                 UpdateWindowTitle();
             }
-            else if (ctl == manga.TotalChapters && ptl == manga.Chapters[ctl].PageCount)
+            else if (isLastPageOfChapter() && isLastChapter())
             {
                 // show message box with basic info
                 //
@@ -103,7 +100,7 @@ namespace MangaReader.Forms
             {
                 // increment the chapter index
                 //
-                ctl++;
+                ctl--;
 
                 // set the page index to 0 (first page of the next chapter)
                 ptl = 0;
@@ -121,6 +118,38 @@ namespace MangaReader.Forms
         private void UpdateWindowTitle()
         {
             Text = "Manga Reader - " + manga.Title + ", Chapter " + manga.Chapters[ctl].ChapterNumber + ", Page " + manga.Chapters[ctl].ChapterPages[ptl].PageNumber;
+        }
+
+        private bool isFirstChapter()
+        {
+            if (manga.Chapters[ctl].ChapterNumber == manga.Chapters[0].ChapterNumber)
+                return true;
+            else
+                return false;
+        }
+
+        private bool isLastChapter()
+        {
+            if (manga.Chapters[ctl].ChapterNumber == manga.TotalChapters)
+                return true;
+            else
+                return false;
+        }
+
+        private bool isFirstPageOfChapter()
+        {
+            if (manga.Chapters[ctl].ChapterPages[ptl].PageNumber == manga.Chapters[0].ChapterPages[0].PageNumber)
+                return true;
+            else
+                return false;
+        }
+
+        private bool isLastPageOfChapter()
+        {
+            if (manga.Chapters[ctl].ChapterPages[ptl].PageNumber == manga.Chapters[ctl].ChapterPages[manga.Chapters[ctl].PageCount].PageNumber)
+                return true;
+            else
+                return false;
         }
     }
 }

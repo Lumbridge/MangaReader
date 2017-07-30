@@ -38,11 +38,19 @@ namespace MangaReader.Forms
             if(MangaList.Count > 0)
                 comboBox_MangaTitle.SelectedIndex = 0;
 
+            // set the default title of the manga object
+            //
             manga.Title = comboBox_MangaTitle.Text;
         }
         
         private void comboBox_MangaTitle_SelectedIndexChanged(object sender, EventArgs e)
         {
+            // we nullify the chapters collection to make the chapters
+            // getter method download the chapters of the new manga we've selected
+            // if we don't do this then the chapters which are currently loaded won't change
+            //
+            manga.Chapters = null;
+
             // clear the chapter box of items
             //
             comboBox_MangaChapter.Items.Clear();
@@ -54,8 +62,6 @@ namespace MangaReader.Forms
             // set the new title of the manga we're searching for chapters on
             //
             manga.Title = comboBox_MangaTitle.Text;
-            
-            Console.WriteLine(manga.Title);
 
             // populate the chapter combo box with the chapters of the manga
             // we're searching for
@@ -63,12 +69,18 @@ namespace MangaReader.Forms
             foreach (var c in manga.Chapters)
             {
                 comboBox_MangaChapter.Items.Add(c.ChapterTitle);
-                Console.WriteLine(c.ChapterTitle);
+                c.Print();
             }
         }
 
         private void comboBox_MangaChapter_SelectedIndexChanged(object sender, EventArgs e)
         {
+            // check that we've loaded manga pages before setting the default index
+            // to avoid throwing exceptions
+            //
+            if(comboBox_MangaPage.Items.Count > 0)
+                comboBox_MangaPage.SelectedIndex = 0;
+
             // clear the pages combobox
             //
             comboBox_MangaPage.Items.Clear();
@@ -77,20 +89,30 @@ namespace MangaReader.Forms
             //
             manga.Title = comboBox_MangaTitle.Text;
 
+            // add all the chapter's pages to the combo box
+            //
             foreach (var p in manga.Chapters[comboBox_MangaChapter.SelectedIndex].ChapterPages)
                 comboBox_MangaPage.Items.Add(p.PageNumber);
 
+            // set the chapter to load to the combo box selection we've made
+            //
             ctl = comboBox_MangaChapter.SelectedIndex;
         }
 
         private void comboBox_MangaPage_SelectedIndexChanged(object sender, EventArgs e)
         {
+            // set the page to load to the page combo box selection we've made
+            //
             ptl = comboBox_MangaPage.SelectedIndex;
         }
 
         private void button_BeginReading_Click(object sender, EventArgs e)
         {
+            // create the reading window form
+            //
             ReadingForm rf = new ReadingForm(this);
+
+            // show the reading window form
             rf.ShowDialog();
         }
     }

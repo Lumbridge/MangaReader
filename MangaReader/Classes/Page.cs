@@ -9,7 +9,7 @@ namespace MangaReader.Classes
     public class Page
     {
         // public
-        public string PageNumber { get; set; }
+        public int PageNumber { get; set; }
         public string PageLink { get; set; }
         public string ImageLink { get; set; }
         public bool PageDownloaded { get; set; }
@@ -66,7 +66,7 @@ namespace MangaReader.Classes
         /// </summary>
         public Page()
         {
-            PageNumber = string.Empty;
+            PageNumber = -1;
             PageLink = string.Empty;
             ImageLink = string.Empty;
             _PageImage = null;
