@@ -50,6 +50,15 @@ namespace MangaReader.Classes
             return count;
         }
 
+        /// <summary>
+        /// gets the index of a certain character after a certain number of occurances
+        /// e.g. if you want the index of the second '.' in the string he.llo.world. then you would
+        /// use GetIndexOfAfterOccuranceCount("he.llo.world.", '.', 2)...
+        /// </summary>
+        /// <param name="word"></param>
+        /// <param name="character"></param>
+        /// <param name="count"></param>
+        /// <returns></returns>
         public static int GetIndexOfAfterOccuranceCount(string word, char character, int count)
         {
             int counter = 0;
@@ -64,6 +73,7 @@ namespace MangaReader.Classes
             }
 
             // failed for some reason
+            //
             return -1;
         }
 

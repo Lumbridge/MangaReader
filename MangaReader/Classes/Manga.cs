@@ -38,7 +38,7 @@ namespace MangaReader.Classes
         /// <param name="savePath"></param>
         public void DownloadChaptersToFile(string savePath)
         {
-            foreach(var c in Chapters)
+            foreach(MangaChapter c in Chapters)
             {
                 // create a new folder for each chapter
                 //
@@ -48,15 +48,20 @@ namespace MangaReader.Classes
                 //
                 string currentDirectory = @savePath + "\\" + c.ChapterTitle + '\\';
 
-                foreach (var p in c.ChapterPages)
+                foreach(Page p in c.ChapterPages)
                 {
+                    // create a local current page variable to be used in the download file function
+                    //
                     string currentPage = currentDirectory + p.PageNumber + p.FileExtension;
 
-                    using (WebClient client = new WebClient())
-                    {
-                        client.DownloadFile(p.ImageLink, currentPage);
-                        Console.WriteLine("Downloaded: {0}", currentPage);
-                    }
+                    // open a webclient instance
+                    //
+                    WebClient client = new WebClient();
+
+                    // download the page image using the local link we created
+                    //
+                    client.DownloadFile(p.ImageLink, currentPage);
+                    Console.WriteLine("Downloaded: {0}", currentPage);
                 }
             }
         }
@@ -222,6 +227,25 @@ namespace MangaReader.Classes
             {
                 _TotalChapters = value;
             }
+        }
+
+        /// <summary>
+        /// returns the index of a god in the manga list
+        /// </summary>
+        /// <param name="mangaList"></param>
+        /// <param name="searchTitle"></param>
+        /// <returns></returns>
+        public static int GetIndexInList(List<Manga> mangaList, string searchTitle)
+        {
+            int index = -1;
+
+            Parallel.For(0, mangaList.Count, i =>
+            {
+                if (mangaList[i].Title == searchTitle)
+                    index = i;
+            });
+
+            return index;
         }
     }
 }

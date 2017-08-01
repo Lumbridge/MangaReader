@@ -46,6 +46,7 @@
             // 
             // comboBox_MangaChapter
             // 
+            this.comboBox_MangaChapter.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox_MangaChapter.FormattingEnabled = true;
             this.comboBox_MangaChapter.Location = new System.Drawing.Point(12, 39);
             this.comboBox_MangaChapter.Name = "comboBox_MangaChapter";
@@ -55,6 +56,7 @@
             // 
             // comboBox_MangaPage
             // 
+            this.comboBox_MangaPage.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox_MangaPage.FormattingEnabled = true;
             this.comboBox_MangaPage.Location = new System.Drawing.Point(12, 66);
             this.comboBox_MangaPage.Name = "comboBox_MangaPage";
@@ -92,6 +94,7 @@
             this.Controls.Add(this.comboBox_MangaPage);
             this.Controls.Add(this.comboBox_MangaChapter);
             this.Controls.Add(this.comboBox_MangaTitle);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "MainForm";
             this.Text = "Manga Reader Main Menu";
             this.Load += new System.EventHandler(this.MainForm_Load);

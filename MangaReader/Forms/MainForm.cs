@@ -5,19 +5,14 @@ using System.Collections.Generic;
 
 using MangaReader.Classes;
 
+using static MangaReader.Classes.Manga;
 using static MangaReader.Classes.Common;
+using static MangaReader.Classes.GlobalVariables;
 
 namespace MangaReader.Forms
 {
     public partial class MainForm : Form
     {
-        // public variables
-        //
-        public Manga manga = new Manga();
-
-        public int ctl = 0; // chapter to load
-        public int ptl = 0; // page to load
-
         public MainForm()
         {
             InitializeComponent();
@@ -32,26 +27,19 @@ namespace MangaReader.Forms
             // add all manga titles to the combobox
             //
             foreach (var t in MangaList)
-                comboBox_MangaTitle.Items.Add(t);
+                loadedManga.Add(new Manga() { Title = t });
+
+            foreach (var g in loadedManga)
+                comboBox_MangaTitle.Items.Add(g.Title);
 
             // check that we have items in the collection before forcing
             // the index
             if(MangaList.Count > 0)
                 comboBox_MangaTitle.SelectedIndex = 0;
-
-            // set the default title of the manga object
-            //
-            manga.Title = comboBox_MangaTitle.Text;
         }
         
         private void comboBox_MangaTitle_SelectedIndexChanged(object sender, EventArgs e)
         {
-            // we nullify the chapters collection to make the chapters
-            // getter method download the chapters of the new manga we've selected
-            // if we don't do this then the chapters which are currently loaded won't change
-            //
-            manga.Chapters = null;
-
             // clear the chapter box of items
             //
             comboBox_MangaChapter.Items.Clear();
@@ -60,14 +48,13 @@ namespace MangaReader.Forms
             //
             comboBox_MangaPage.Items.Clear();
 
-            // set the new title of the manga we're searching for chapters on
+            // get the position in the mangalist of the manga we want to load
             //
-            manga.Title = comboBox_MangaTitle.Text;
+            pos = GetIndexInList(loadedManga, comboBox_MangaTitle.Text);
 
-            // populate the chapter combo box with the chapters of the manga
-            // we're searching for
+            // populate the chapter combo box with the chapters of the manga we're searching for
             //
-            foreach (var c in manga.Chapters)
+            foreach (var c in loadedManga[pos].Chapters)
             {
                 comboBox_MangaChapter.Items.Add(c.ChapterTitle);
                 c.Print();
@@ -79,20 +66,16 @@ namespace MangaReader.Forms
             // check that we've loaded manga pages before setting the default index
             // to avoid throwing exceptions
             //
-            if(comboBox_MangaPage.Items.Count > 0)
+            if (comboBox_MangaPage.Items.Count > 0)
                 comboBox_MangaPage.SelectedIndex = 0;
 
             // clear the pages combobox
             //
             comboBox_MangaPage.Items.Clear();
 
-            // set the new title of the manga we're searching for chapters on
-            //
-            manga.Title = comboBox_MangaTitle.Text;
-
             // add all the chapter's pages to the combo box
             //
-            foreach (var p in manga.Chapters[comboBox_MangaChapter.SelectedIndex].ChapterPages)
+            foreach (var p in loadedManga[pos].Chapters[comboBox_MangaChapter.SelectedIndex].ChapterPages)
                 comboBox_MangaPage.Items.Add(p.PageNumber);
 
             // set the chapter to load to the combo box selection we've made
@@ -111,7 +94,7 @@ namespace MangaReader.Forms
         {
             // create the reading window form
             //
-            ReadingForm rf = new ReadingForm(this);
+            ReadingForm rf = new ReadingForm();
 
             // show the reading window form
             //
@@ -141,18 +124,9 @@ namespace MangaReader.Forms
                 if (!Directory.Exists(s.FileName))
                     Directory.CreateDirectory(s.FileName);
 
-                // create a string to pass into the download function as the path
-                // to save downloaded manga chapters
-                //
-                //string t = s.FileName;
-                
-                // remove the file name at the end of the path so we just get a directory
-                //
-                //t = t.Remove(t.LastIndexOf('\\') + 1);
-
                 // call the download function to download all chapters & pages to file
                 //
-                manga.DownloadChaptersToFile(s.FileName);
+                loadedManga[pos].DownloadChaptersToFile(s.FileName);
             }
         }
     }

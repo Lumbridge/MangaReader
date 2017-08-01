@@ -3,29 +3,22 @@ using System.Windows.Forms;
 
 using MangaReader.Classes;
 
+using static MangaReader.Classes.GlobalVariables;
+
 namespace MangaReader.Forms
 {
     public partial class ReadingForm : Form
     {
-        private int ctl = 0, ptl = 0;
-        private Manga manga;
-        private MainForm _MainFormHandle;
-
-        public ReadingForm(MainForm mf)
+        public ReadingForm()
         {
             InitializeComponent();
-
-            _MainFormHandle = mf;
-            ctl = mf.ctl;
-            ptl = mf.ptl;
-            manga = mf.manga;
         }
 
         private void ReadingForm_Load(object sender, EventArgs e)
         {
             // load the page image into the picturebox
             //
-            pictureBox1.Image = manga.Chapters[ctl].ChapterPages[ptl].PageImage;
+            pictureBox1.Image = loadedManga[pos].Chapters[ctl].ChapterPages[ptl].PageImage;
 
             // update the window text to reflect the current location in the manga
             //
@@ -42,7 +35,7 @@ namespace MangaReader.Forms
 
                 // load the page image into the picturebox
                 //
-                pictureBox1.Image = manga.Chapters[ctl].ChapterPages[ptl].PageImage;
+                pictureBox1.Image = loadedManga[pos].Chapters[ctl].ChapterPages[ptl].PageImage;
 
                 // update the window text to reflect the current location in the manga
                 //
@@ -62,11 +55,11 @@ namespace MangaReader.Forms
 
                 // set page to load to the last page of the previous chapter
                 //
-                ptl = manga.Chapters[ctl].PageCount - 1;
+                ptl = loadedManga[pos].Chapters[ctl].PageCount - 1;
 
                 // load the page image into the picturebox
                 //
-                pictureBox1.Image = manga.Chapters[ctl].ChapterPages[ptl].PageImage;
+                pictureBox1.Image = loadedManga[pos].Chapters[ctl].ChapterPages[ptl].PageImage;
 
                 // update the window text to reflect the current location in the manga
                 //
@@ -84,7 +77,7 @@ namespace MangaReader.Forms
 
                 // load the next page image into the picturebox
                 //
-                pictureBox1.Image = manga.Chapters[ctl].ChapterPages[ptl].PageImage;
+                pictureBox1.Image = loadedManga[pos].Chapters[ctl].ChapterPages[ptl].PageImage;
 
                 // update the window text to reflect the current location in the manga
                 //
@@ -107,7 +100,7 @@ namespace MangaReader.Forms
 
                 // load the page image into the picturebox
                 //
-                pictureBox1.Image = manga.Chapters[ctl].ChapterPages[ptl].PageImage;
+                pictureBox1.Image = loadedManga[pos].Chapters[ctl].ChapterPages[ptl].PageImage;
 
                 // update the window text to reflect the current location in the manga
                 //
@@ -115,41 +108,48 @@ namespace MangaReader.Forms
             }
         }
 
+        /// <summary>
+        /// updates the window text to give information on the location in the manga
+        /// </summary>
         private void UpdateWindowTitle()
         {
-            Text = "Manga Reader - " + manga.Title + ", Chapter " + manga.Chapters[ctl].ChapterNumber + ", Page " + manga.Chapters[ctl].ChapterPages[ptl].PageNumber;
+            Text = "Manga Reader - " + loadedManga[pos].Title + ", Chapter " + loadedManga[pos].Chapters[ctl].ChapterNumber + ", Page " + loadedManga[pos].Chapters[ctl].ChapterPages[ptl].PageNumber;
         }
 
+        /// <summary>
+        /// returns whether the user is currently on the first chapter of the manga or not
+        /// </summary>
+        /// <returns></returns>
         private bool isFirstChapter()
         {
-            if (manga.Chapters[ctl].ChapterNumber == manga.Chapters[0].ChapterNumber)
-                return true;
-            else
-                return false;
+            return loadedManga[pos].Chapters[ctl].ChapterNumber == loadedManga[pos].Chapters[0].ChapterNumber ? true : false;
         }
 
+        /// <summary>
+        /// returns whether the user is currently on the last chapter of the manga or not
+        /// </summary>
+        /// <returns></returns>
         private bool isLastChapter()
         {
-            if (manga.Chapters[ctl].ChapterNumber == manga.Chapters[manga.TotalChapters].ChapterNumber)
-                return true;
-            else
-                return false;
+            return loadedManga[pos].Chapters[ctl].ChapterNumber == loadedManga[pos].Chapters[loadedManga[pos].TotalChapters - 1].ChapterNumber ? true : false;
         }
 
+        /// <summary>
+        /// returns whether the user is currently on the first page of the chapter of the manga or not
+        /// </summary>
+        /// <returns></returns>
         private bool isFirstPageOfChapter()
         {
-            if (manga.Chapters[ctl].ChapterPages[ptl].PageNumber == manga.Chapters[0].ChapterPages[0].PageNumber)
-                return true;
-            else
-                return false;
+            return loadedManga[pos].Chapters[ctl].ChapterPages[ptl].PageNumber == loadedManga[pos].Chapters[0].ChapterPages[0].PageNumber ? true : false;
         }
 
+        /// <summary>
+        /// returns whether the user is currently on the last page of the chapter of the manga or not
+        /// </summary>
+        /// <returns></returns>
         private bool isLastPageOfChapter()
         {
-            if (manga.Chapters[ctl].ChapterPages[ptl].PageNumber == manga.Chapters[ctl].ChapterPages[manga.Chapters[ctl].PageCount - 1].PageNumber)
-                return true;
-            else
-                return false;
+            return loadedManga[pos].Chapters[ctl].ChapterPages[ptl].PageNumber == loadedManga[pos].Chapters[ctl].ChapterPages[loadedManga[pos].Chapters[ctl].PageCount - 1].PageNumber ? true : false;
         }
     }
 }

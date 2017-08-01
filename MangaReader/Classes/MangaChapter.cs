@@ -11,14 +11,30 @@ namespace MangaReader.Classes
 {
     public class MangaChapter
     {
-        // public
+        // public variables
+        //
         public string ChapterTitle { get; set; }
         public string ChapterLink { get; set; }
         public string ChapterNumber { get; set; }
 
-        //private
+        //private variables
+        //
         private List<Page> _ChapterPages { get; set; }
         private int _PageCount { get; set; }
+
+        /// <summary>
+        /// chapter constructor
+        /// </summary>
+        public MangaChapter()
+        {
+            ChapterTitle = string.Empty;
+            ChapterLink = string.Empty;
+            ChapterNumber = string.Empty;
+            PageCount = -1;
+
+            _PageCount = -1;
+            _ChapterPages = null;
+        }
 
         /// <summary>
         /// returns all page information on the pages in the current chapter
@@ -46,6 +62,7 @@ namespace MangaReader.Classes
                         int pageNumber = i;
                         string pageLink = ChapterLink + "/page-" + i;
 
+                        //
                         // scrape the page to find the image link
                         // (have to do this because we don't know the file type .png/.jpg & page number could be formatted as 001/0001/01)
                         //
@@ -199,20 +216,6 @@ namespace MangaReader.Classes
             {
                 _PageCount = value;
             }
-        }
-
-        /// <summary>
-        /// chapter constructor
-        /// </summary>
-        public MangaChapter()
-        {
-            ChapterTitle = string.Empty;
-            ChapterLink = string.Empty;
-            ChapterNumber = string.Empty;
-            PageCount = -1;
-
-            _PageCount = -1;
-            _ChapterPages = null;
         }
 
         /// <summary>

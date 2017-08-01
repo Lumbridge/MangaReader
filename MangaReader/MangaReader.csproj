@@ -52,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\Common.cs" />
+    <Compile Include="Classes\GlobalVariables.cs" />
     <Compile Include="Classes\ImageDownloader.cs" />
     <Compile Include="Classes\Manga.cs" />
     <Compile Include="Classes\MangaChapter.cs" />
