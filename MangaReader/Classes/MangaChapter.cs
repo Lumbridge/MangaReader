@@ -14,7 +14,7 @@ namespace MangaReader.Classes
         // public
         public string ChapterTitle { get; set; }
         public string ChapterLink { get; set; }
-        public int ChapterNumber { get; set; }
+        public string ChapterNumber { get; set; }
 
         //private
         private List<Page> _ChapterPages { get; set; }
@@ -70,6 +70,10 @@ namespace MangaReader.Classes
                         //
                         string imageLink = string.Empty;
 
+                        // create a local variable to store parsed file extension
+                        //
+                        string fileExtension = string.Empty;
+
                         try
                         {
                             // create a node using the path we created
@@ -92,6 +96,10 @@ namespace MangaReader.Classes
                                     //
                                     imageLink = temp;
 
+                                    // get the file extension by making a substring of the last . in the link string
+                                    //
+                                    fileExtension = imageLink.Substring(imageLink.LastIndexOf('.'));
+
                                     // stop the parallel operation earlier because we've got the image link
                                     //
                                     state.Stop();
@@ -111,7 +119,8 @@ namespace MangaReader.Classes
                         {
                             PageNumber = pageNumber,
                             PageLink = pageLink,
-                            ImageLink = imageLink
+                            ImageLink = imageLink,
+                            FileExtension = fileExtension
                         });
                     }
 
@@ -199,7 +208,7 @@ namespace MangaReader.Classes
         {
             ChapterTitle = string.Empty;
             ChapterLink = string.Empty;
-            ChapterNumber = -1;
+            ChapterNumber = string.Empty;
             PageCount = -1;
 
             _PageCount = -1;

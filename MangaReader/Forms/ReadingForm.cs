@@ -130,7 +130,7 @@ namespace MangaReader.Forms
 
         private bool isLastChapter()
         {
-            if (manga.Chapters[ctl].ChapterNumber == manga.TotalChapters)
+            if (manga.Chapters[ctl].ChapterNumber == manga.Chapters[manga.TotalChapters].ChapterNumber)
                 return true;
             else
                 return false;

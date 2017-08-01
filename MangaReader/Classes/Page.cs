@@ -12,6 +12,7 @@ namespace MangaReader.Classes
         public int PageNumber { get; set; }
         public string PageLink { get; set; }
         public string ImageLink { get; set; }
+        public string FileExtension { get; set; }
         public bool PageDownloaded { get; set; }
 
         // private
@@ -27,7 +28,7 @@ namespace MangaReader.Classes
                 // check if we've downloaded the page before in this instance
                 // if we've downloaded it then we skip downloading and just return the image
                 //
-                if(_PageImage == null)
+                if(!PageDownloaded)
                 {
                     // downloads a stream of bytes using the download data function (from imageloader class)
                     //
@@ -69,6 +70,7 @@ namespace MangaReader.Classes
             PageNumber = -1;
             PageLink = string.Empty;
             ImageLink = string.Empty;
+            FileExtension = string.Empty;
             _PageImage = null;
         }
 

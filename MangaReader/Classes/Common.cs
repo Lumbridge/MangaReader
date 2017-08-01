@@ -21,7 +21,50 @@ namespace MangaReader.Classes
         public static string GetSubstringByString(string a, string b, string c)
         {
             try { return c.Substring((c.IndexOf(a) + a.Length), (c.IndexOf(b) - c.IndexOf(a) - a.Length)); }
-            catch { return "ERROR CREATING SUBSTRING"; }
+            catch { Console.WriteLine("ERROR CREATING SUBSTRING"); return "ERROR CREATING SUBSTRING"; }
+        }
+
+        /// <summary>
+        /// returns the number of occurances of a character within a string
+        /// </summary>
+        /// <param name="word"></param>
+        /// <param name="character"></param>
+        /// <returns></returns>
+        public static int GetOccuranceOfCharacter(string word, char character)
+        {
+            // create a counter variable and set it to 0
+            //
+            int count = 0;
+
+            // loop through each character in the word
+            //
+            foreach (char c in word)
+                // if the character matches the character we're searching for then...
+                //
+                if (c == character)
+                    // ... increment our counter
+                    //
+                    count++;
+
+            // return the final count
+            return count;
+        }
+
+        public static int GetIndexOfAfterOccuranceCount(string word, char character, int count)
+        {
+            int counter = 0;
+
+            for(int i = 0; i < word.Length; i++)
+            {
+                if (word[i] == character)
+                    counter++;
+
+                if (counter == count)
+                    return i;
+            }
+
+            // failed for some reason
+            return -1;
         }
 
         /// <summary>

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -32,24 +33,57 @@ namespace MangaReader.Classes
         }
 
         /// <summary>
+        /// downloads all chapters & pages to the hard drive
+        /// </summary>
+        /// <param name="savePath"></param>
+        public void DownloadChaptersToFile(string savePath)
+        {
+            foreach(var c in Chapters)
+            {
+                // create a new folder for each chapter
+                //
+                Directory.CreateDirectory(@savePath + "\\" + c.ChapterTitle);
+
+                // creates a local directory variable to make code easier to read
+                //
+                string currentDirectory = @savePath + "\\" + c.ChapterTitle + '\\';
+
+                foreach (var p in c.ChapterPages)
+                {
+                    string currentPage = currentDirectory + p.PageNumber + p.FileExtension;
+
+                    using (WebClient client = new WebClient())
+                    {
+                        client.DownloadFile(p.ImageLink, currentPage);
+                        Console.WriteLine("Downloaded: {0}", currentPage);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
         /// returns a list of all chapter titles, numbers and links
         /// </summary>
         public List<MangaChapter> Chapters
         {
             get
             {
-                if(_Chapters == null)
+                // create a local version of the title so we can manipulate it for use in links
+                //
+                string MangaTitle = Title;
+
+                // create temporary list to store found chapters
+                //
+                List<MangaChapter> temp = new List<MangaChapter>();
+
+                // create our html document to store the html data
+                //
+                HtmlDocument doc = new HtmlDocument();
+
+                if (_Chapters == null)
                 {
                     try
                     {
-                        // create a local version of the title so we can manipulate it for use in links
-                        //
-                        string MangaTitle = Title;
-
-                        // create temporary list to store found chapters
-                        //
-                        List<MangaChapter> temp = new List<MangaChapter>();
-
                         // check for whitespace before creating the page link
                         //
                         if (MangaTitle.Contains(" "))
@@ -59,6 +93,8 @@ namespace MangaReader.Classes
                         //
                         string url = "http://eatmanga.me/Manga-Scan/" + MangaTitle + "/";
 
+                        Console.WriteLine(url);
+
                         // create the webclient object
                         //
                         WebClient webClient = new WebClient();
@@ -66,49 +102,59 @@ namespace MangaReader.Classes
                         // download the webpage and store it
                         //
                         string page = webClient.DownloadString(url);
-
-                        // create our html document to store the html data
-                        //
-                        HtmlDocument doc = new HtmlDocument();
-
+                        
                         // load the html data to be parsed
                         //
                         doc.LoadHtml(page);
+                    }
+                    catch
+                    {
+                        Console.WriteLine("Failed to download webpage");
+                    }
 
+                    try
+                    {
                         // drill down into the html to find the data we need
                         //
-                        foreach (HtmlNode node in doc.DocumentNode.SelectNodes("//ul[@id='updates']"))
+                        var nodes = doc.DocumentNode.SelectNodes("//div[@class='col-xs-8']");
+
+                        foreach(var node in nodes)
                         {
-                            foreach (HtmlNode node2 in node.SelectNodes(".//li[@class='title']"))
+                            // add the html to a local variable so we can manipulate it without changing the original
+                            //
+                            string t = node.InnerHtml;
+
+                            // get the title of the chapter
+                            //
+                            string chapterTitle = node.InnerText.Trim();
+
+                            // get the link of the chapter page
+                            //
+                            string chapterLink = "http://eatmanga.me/Manga-Scan/" + MangaTitle + "/" + GetSubstringByString(MangaTitle + "/", "/\" title=", t);
+                            
+                            // get the number of spaces in the manga title
+                            //
+                            int x = GetOccuranceOfCharacter(MangaTitle, '-') + 1;
+
+                            // get the index of the final space so we can get the chapter number
+                            //
+                            int y = GetIndexOfAfterOccuranceCount(chapterTitle, ' ', x) + 1;
+
+                            // get the chapter number
+                            //
+                            string chapterNumber = chapterTitle.Substring(y);
+                            
+                            if (chapterNumber.Contains(" "))
+                                chapterNumber = chapterNumber.Remove(chapterNumber.IndexOf(' ') + 1).Trim();
+
+                            // add our parsed information to a chapter object
+                            //
+                            temp.Add(new MangaChapter()
                             {
-                                // add the html to a local variable so we can manipulate it without changing the original
-                                //
-                                string t = node2.InnerHtml;
-
-                                // get the title of the chapter
-                                //
-                                string chapterTitle = GetSubstringByString("/\" title=\"", ", Read", t);
-
-                                // get the link of the chapter page
-                                //
-                                string chapterLink = "http://eatmanga.me/Manga-Scan/" + MangaTitle + "/" + GetSubstringByString(MangaTitle + "/", "/\" title=", t);
-
-                                // get the chapter number
-                                //
-                                string chapterNumber = chapterTitle.Substring(chapterTitle.LastIndexOf(MangaTitle) + MangaTitle.Length + 1).Trim();
-
-                                if (chapterNumber.Contains(" "))
-                                    chapterNumber = chapterNumber.Remove(chapterNumber.IndexOf(' ') + 1).Trim();
-
-                                // add our parsed information to a chapter object
-                                //
-                                temp.Add(new MangaChapter()
-                                {
-                                    ChapterTitle = chapterTitle,
-                                    ChapterLink = chapterLink,
-                                    ChapterNumber = int.Parse(chapterNumber)
-                                });
-                            }
+                                ChapterTitle = chapterTitle,
+                                ChapterLink = chapterLink,
+                                ChapterNumber = chapterNumber
+                            });
                         }
 
                         // reverse the list so it appears in order in the combo box
@@ -124,7 +170,7 @@ namespace MangaReader.Classes
                         // there was an error getting the chapters e.g. no internet
                         //
                         Console.WriteLine("Error fetching manga, check the title spelling.");
-                        
+
                         // allocate an empty list to the main object collection so we don't attempt to get the chapters infinitely
                         //
                         _Chapters = new List<MangaChapter>();
@@ -141,6 +187,9 @@ namespace MangaReader.Classes
             }
         }
 
+        /// <summary>
+        /// returns the total number of chapters in the manga
+        /// </summary>
         public int TotalChapters
         {
             get

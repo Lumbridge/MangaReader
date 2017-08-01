@@ -1,6 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.IO;
 using System.Windows.Forms;
+using System.Collections.Generic;
 
 using MangaReader.Classes;
 
@@ -113,7 +114,46 @@ namespace MangaReader.Forms
             ReadingForm rf = new ReadingForm(this);
 
             // show the reading window form
+            //
             rf.ShowDialog();
+        }
+
+        private void button_DownloadEntireManga_Click(object sender, EventArgs e)
+        {
+            // create save file dialog object
+            //
+            SaveFileDialog s = new SaveFileDialog();
+
+            // set the save directory to the title of the manga we're going to be downloading
+            //
+            s.FileName = comboBox_MangaTitle.Text;
+
+            // show the dialog and get the result back
+            //
+            var dialogResult = s.ShowDialog();
+
+            // action if the user presses ok on the dialog window
+            //
+            if(dialogResult == DialogResult.OK)
+            {
+                // create the directory if it doesn't exist
+                //
+                if (!Directory.Exists(s.FileName))
+                    Directory.CreateDirectory(s.FileName);
+
+                // create a string to pass into the download function as the path
+                // to save downloaded manga chapters
+                //
+                //string t = s.FileName;
+                
+                // remove the file name at the end of the path so we just get a directory
+                //
+                //t = t.Remove(t.LastIndexOf('\\') + 1);
+
+                // call the download function to download all chapters & pages to file
+                //
+                manga.DownloadChaptersToFile(s.FileName);
+            }
         }
     }
 }
